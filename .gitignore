@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# Project outputs (regenerate rather than commit)
+data/
+figures/
+models/
+*.npz
+*.parquet
+*.zip
