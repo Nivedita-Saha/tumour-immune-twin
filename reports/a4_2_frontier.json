@@ -1,0 +1,73 @@
+{
+  "n_test_patients": 46,
+  "total_timesteps": 250000,
+  "baselines": [
+    {
+      "label": "no treatment",
+      "control_rate": 0.0,
+      "mean_dose": 0.0
+    },
+    {
+      "label": "constant 0.2",
+      "control_rate": 10.869565217391305,
+      "mean_dose": 20.00000000000001
+    },
+    {
+      "label": "constant 0.3",
+      "control_rate": 13.043478260869565,
+      "mean_dose": 29.999999999999908
+    },
+    {
+      "label": "constant 0.5",
+      "control_rate": 17.391304347826086,
+      "mean_dose": 50.0
+    },
+    {
+      "label": "constant 0.7",
+      "control_rate": 26.08695652173913,
+      "mean_dose": 70.00000000000009
+    },
+    {
+      "label": "maximum dose",
+      "control_rate": 32.608695652173914,
+      "mean_dose": 100.0
+    },
+    {
+      "label": "treat until T < 0.10",
+      "control_rate": 17.391304347826086,
+      "mean_dose": 45.07065217391305
+    }
+  ],
+  "learned": [
+    {
+      "w_dose": 0.03,
+      "control_rate": 30.434782608695652,
+      "mean_dose": 79.44997598797731,
+      "val_control_rate": 34.78260869565217
+    },
+    {
+      "w_dose": 0.08,
+      "control_rate": 32.608695652173914,
+      "mean_dose": 79.42052763935341,
+      "val_control_rate": 34.78260869565217
+    },
+    {
+      "w_dose": 0.15,
+      "control_rate": 30.434782608695652,
+      "mean_dose": 75.1989209510224,
+      "val_control_rate": 34.78260869565217
+    },
+    {
+      "w_dose": 0.3,
+      "control_rate": 30.434782608695652,
+      "mean_dose": 54.83913028466961,
+      "val_control_rate": 34.78260869565217
+    },
+    {
+      "w_dose": 0.6,
+      "control_rate": 28.26086956521739,
+      "mean_dose": 27.91829395022891,
+      "val_control_rate": 30.434782608695652
+    }
+  ]
+}
