@@ -1,0 +1,145 @@
+{
+  "description": "Controller sweep grid: every (seed, w_dose) pair.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "w_dose_values": [
+    0.03,
+    0.08,
+    0.15,
+    0.3,
+    0.6
+  ],
+  "n_tasks": 25,
+  "tasks": [
+    {
+      "task": 0,
+      "seed": 0,
+      "w_dose": 0.03
+    },
+    {
+      "task": 1,
+      "seed": 0,
+      "w_dose": 0.08
+    },
+    {
+      "task": 2,
+      "seed": 0,
+      "w_dose": 0.15
+    },
+    {
+      "task": 3,
+      "seed": 0,
+      "w_dose": 0.3
+    },
+    {
+      "task": 4,
+      "seed": 0,
+      "w_dose": 0.6
+    },
+    {
+      "task": 5,
+      "seed": 1,
+      "w_dose": 0.03
+    },
+    {
+      "task": 6,
+      "seed": 1,
+      "w_dose": 0.08
+    },
+    {
+      "task": 7,
+      "seed": 1,
+      "w_dose": 0.15
+    },
+    {
+      "task": 8,
+      "seed": 1,
+      "w_dose": 0.3
+    },
+    {
+      "task": 9,
+      "seed": 1,
+      "w_dose": 0.6
+    },
+    {
+      "task": 10,
+      "seed": 2,
+      "w_dose": 0.03
+    },
+    {
+      "task": 11,
+      "seed": 2,
+      "w_dose": 0.08
+    },
+    {
+      "task": 12,
+      "seed": 2,
+      "w_dose": 0.15
+    },
+    {
+      "task": 13,
+      "seed": 2,
+      "w_dose": 0.3
+    },
+    {
+      "task": 14,
+      "seed": 2,
+      "w_dose": 0.6
+    },
+    {
+      "task": 15,
+      "seed": 3,
+      "w_dose": 0.03
+    },
+    {
+      "task": 16,
+      "seed": 3,
+      "w_dose": 0.08
+    },
+    {
+      "task": 17,
+      "seed": 3,
+      "w_dose": 0.15
+    },
+    {
+      "task": 18,
+      "seed": 3,
+      "w_dose": 0.3
+    },
+    {
+      "task": 19,
+      "seed": 3,
+      "w_dose": 0.6
+    },
+    {
+      "task": 20,
+      "seed": 4,
+      "w_dose": 0.03
+    },
+    {
+      "task": 21,
+      "seed": 4,
+      "w_dose": 0.08
+    },
+    {
+      "task": 22,
+      "seed": 4,
+      "w_dose": 0.15
+    },
+    {
+      "task": 23,
+      "seed": 4,
+      "w_dose": 0.3
+    },
+    {
+      "task": 24,
+      "seed": 4,
+      "w_dose": 0.6
+    }
+  ]
+}
