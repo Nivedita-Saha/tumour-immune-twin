@@ -401,8 +401,15 @@ if __name__ == "__main__":
     torch.manual_seed(RANDOM_SEED)
     np.random.seed(RANDOM_SEED)
 
-    # A small MLP trains quickly on CPU, and CPU avoids backend quirks.
-    device = torch.device("cpu")
+    # Use the GPU when one is available (e.g. a Colab/Kaggle GPU runtime or a
+    # NAISS GPU node) and fall back to CPU otherwise. Every tensor and the
+    # model below are already moved to `device`, so the same script runs
+    # unchanged on either. The device is printed so it appears in run logs.
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if device.type == "cuda":
+        print(f"Device: cuda ({torch.cuda.get_device_name(0)})")
+    else:
+        print("Device: cpu")
 
     print("Loading data...")
     X, Y, masks, trans = load_data()

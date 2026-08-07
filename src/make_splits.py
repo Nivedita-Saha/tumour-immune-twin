@@ -45,7 +45,7 @@ VAL_FRACTION = 0.15
 # test takes the remainder
 
 
-def stratified_patient_split(outcomes, seed=RANDOM_SEED):
+def stratified_patient_split(outcomes, treatable=None, seed=RANDOM_SEED):
     """
     Assign patients to train, validation and test sets.
 
@@ -58,8 +58,20 @@ def stratified_patient_split(outcomes, seed=RANDOM_SEED):
     rng = np.random.default_rng(seed)
     train_ids, val_ids, test_ids = [], [], []
 
-    for outcome in np.unique(outcomes):
-        members = np.flatnonzero(outcomes == outcome)
+    # Stratify on the combination of untreated outcome and structural
+    # treatability. Treatable patients are the controller's entire population
+    # and are a minority of the cohort, so leaving their distribution to
+    # chance could leave one split badly under-supplied.
+    if treatable is None:
+        keys = outcomes
+    else:
+        keys = np.array([
+            f"{o}|{'treatable' if t else 'monostable'}"
+            for o, t in zip(outcomes, treatable)
+        ])
+
+    for key in np.unique(keys):
+        members = np.flatnonzero(keys == key)
         rng.shuffle(members)
 
         n = len(members)
@@ -190,7 +202,8 @@ if __name__ == "__main__":
 
     print(f"Splitting {n_patients} patients, stratified by untreated outcome...\n")
 
-    train_ids, val_ids, test_ids = stratified_patient_split(outcomes)
+    treatable = cohort["treatable"] if "treatable" in cohort.files else None
+    train_ids, val_ids, test_ids = stratified_patient_split(outcomes, treatable)
     verify_no_overlap(train_ids, val_ids, test_ids, n_patients)
     print("Verified: no patient appears in more than one split.\n")
 
@@ -207,6 +220,14 @@ if __name__ == "__main__":
         print(f"{name:<12} {len(ids):>9} {count:>13,}")
     print(f"{'total':<12} {n_patients:>9} {sum(counts):>13,}")
     print()
+
+    if treatable is not None:
+        print("Treatable patients per split (the controller's population):")
+        for name, ids in zip(["train", "validation", "test"],
+                             [train_ids, val_ids, test_ids]):
+            n_t = int(treatable[ids].sum())
+            print(f"  {name:<12} {n_t:>4}  ({100.0 * n_t / len(ids):.1f} % of split)")
+        print()
 
     print("Outcome mix per split (percent):")
     unique_outcomes = sorted(np.unique(outcomes).tolist())

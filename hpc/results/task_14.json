@@ -1,0 +1,10 @@
+{
+  "task": 14,
+  "seed": 2,
+  "w_dose": 0.6,
+  "control_rate": 32.608695652173914,
+  "mean_dose": 42.66754980045168,
+  "timesteps": 250000,
+  "device": "cpu",
+  "seconds": 29.7
+}

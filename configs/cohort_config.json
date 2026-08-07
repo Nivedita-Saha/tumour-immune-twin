@@ -1,6 +1,6 @@
 {
   "random_seed": 42,
-  "n_requested": 400,
+  "n_requested": 2000,
   "sampling_method": "Latin hypercube",
   "parameter_ranges_as_baseline_multipliers": {
     "r1": [
@@ -71,10 +71,12 @@
   ],
   "horizon": 100.0,
   "outcome_counts": {
-    "escape": 124,
-    "controlled": 191,
-    "host failure": 81,
-    "intermediate": 4
+    "escape": 653,
+    "controlled": 959,
+    "host failure": 381,
+    "intermediate": 7
   },
-  "n_needs_rescue": 205
+  "n_needs_rescue": 1034,
+  "n_rescuable": 1274,
+  "n_treatable": 308
 }

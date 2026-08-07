@@ -144,6 +144,39 @@ def make_params(patient_params):
     return p
 
 
+# ----------------------------------------------------------------------
+# Structural rescuability
+# ----------------------------------------------------------------------
+
+TINY_TUMOUR = 0.02          # small enough that any healthy attractor wins
+RESCUE_HORIZON = 200.0
+
+
+def is_rescuable(params, y0):
+    """
+    Does this patient have a healthy attractor at all?
+
+    Diagnosis (see diagnose_rescuability.py) established that the drug is far
+    too weak to kill the tumour directly. Its maximum kill rate is about 0.19
+    per unit time against a tumour growth rate around 1.5. The drug therefore
+    does not eliminate tumours; it pushes a patient across their separatrix so
+    the immune system can finish.
+
+    That only works if a healthy basin exists. This test starts the patient
+    with a negligible tumour and no treatment. If even that escapes, the
+    system is monostable and no dosing strategy can help. The drug moves
+    patients between basins; it cannot create one.
+
+    Roughly two thirds of sampled patients turn out to be monostable, driven
+    mainly by a high tumour growth rate r1.
+    """
+    probe = y0.copy()
+    probe[1] = TINY_TUMOUR
+    t, Y = simulate(probe, params=params, v=0.0,
+                    t_end=RESCUE_HORIZON, n_points=600)
+    return classify(Y[1], Y[0]) == "controlled"
+
+
 def generate_cohort(n_requested=400, t_end=100.0, seed=RANDOM_SEED, verbose=True):
     """
     Sample patients, simulate each untreated, and label the outcome.
@@ -154,7 +187,7 @@ def generate_cohort(n_requested=400, t_end=100.0, seed=RANDOM_SEED, verbose=True
     param_dicts, y0_array = sample_patients(n_requested, seed=seed)
     param_names = list(PARAMETER_RANGES.keys())
 
-    params_rows, outcomes, final_T, min_N = [], [], [], []
+    params_rows, outcomes, final_T, min_N, rescuable = [], [], [], [], []
     counts = {}
 
     for i, (patient_params, y0) in enumerate(zip(param_dicts, y0_array)):
@@ -169,12 +202,16 @@ def generate_cohort(n_requested=400, t_end=100.0, seed=RANDOM_SEED, verbose=True
         outcomes.append(outcome)
         final_T.append(float(T[-1]))
         min_N.append(float(N.min()))
+        rescuable.append(bool(is_rescuable(p, y0)))
 
         if verbose and (i + 1) % 100 == 0:
             print(f"  simulated {i + 1} / {n_requested} patients...")
 
     outcomes = np.array(outcomes)
+    rescuable = np.array(rescuable)
     needs_rescue = np.isin(outcomes, NEEDS_RESCUE)
+    # The controller's training population: needs help, and can be helped.
+    treatable = needs_rescue & rescuable
 
     return {
         "param_names": param_names,
@@ -182,6 +219,8 @@ def generate_cohort(n_requested=400, t_end=100.0, seed=RANDOM_SEED, verbose=True
         "y0": y0_array,
         "outcomes": outcomes,
         "needs_rescue": needs_rescue,
+        "rescuable": rescuable,
+        "treatable": treatable,
         "final_T": np.array(final_T),
         "min_N": np.array(min_N),
         "n_total": n_requested,
@@ -202,6 +241,8 @@ def save_cohort(cohort, config):
         y0=cohort["y0"],
         outcomes=cohort["outcomes"],
         needs_rescue=cohort["needs_rescue"],
+        rescuable=cohort["rescuable"],
+        treatable=cohort["treatable"],
         final_T=cohort["final_T"],
         min_N=cohort["min_N"],
     )
@@ -209,6 +250,8 @@ def save_cohort(cohort, config):
     config = dict(config)
     config["outcome_counts"] = cohort["outcome_counts"]
     config["n_needs_rescue"] = int(cohort["needs_rescue"].sum())
+    config["n_rescuable"] = int(cohort["rescuable"].sum())
+    config["n_treatable"] = int(cohort["treatable"].sum())
 
     config_path = os.path.join(CONFIG_DIR, "cohort_config.json")
     with open(config_path, "w") as f:
@@ -296,7 +339,7 @@ def plot_cohort(cohort):
 
 
 if __name__ == "__main__":
-    N_REQUESTED = 400
+    N_REQUESTED = 2000
 
     print(f"Sampling {N_REQUESTED} patients by Latin hypercube...\n")
     cohort = generate_cohort(n_requested=N_REQUESTED)
@@ -311,8 +354,14 @@ if __name__ == "__main__":
 
     n_rescue = int(cohort["needs_rescue"].sum())
     print(f"Total kept for surrogate training (Phase 3): {cohort['n_total']}")
-    print(f"Subset needing rescue, for the controller (Phase 4): {n_rescue} "
+    print(f"Subset needing rescue: {n_rescue} "
           f"({100.0 * n_rescue / cohort['n_total']:.1f} %)")
+
+    n_treatable = int(cohort["treatable"].sum())
+    print(f"Of those, structurally rescuable: {n_treatable} "
+          f"({100.0 * n_treatable / max(n_rescue, 1):.1f} % of them)")
+    print(f"  This is the controller's population in Phase 4. The remainder are")
+    print(f"  monostable: no healthy attractor exists, so no dose can help.")
     print()
 
     print("Diversity of the full cohort:")
