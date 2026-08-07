@@ -1,0 +1,45 @@
+{
+  "n_results": 25,
+  "frontier": [
+    {
+      "w_dose": 0.03,
+      "n_seeds": 5,
+      "control_rate_mean": 31.304347826086957,
+      "control_rate_std": 1.0649955403405127,
+      "mean_dose_mean": 80.52257550651127,
+      "mean_dose_std": 1.6856177789980868
+    },
+    {
+      "w_dose": 0.08,
+      "n_seeds": 5,
+      "control_rate_mean": 31.739130434782606,
+      "control_rate_std": 1.0649955403405125,
+      "mean_dose_mean": 78.81388863295155,
+      "mean_dose_std": 1.8945387166585137
+    },
+    {
+      "w_dose": 0.15,
+      "n_seeds": 5,
+      "control_rate_mean": 29.130434782608695,
+      "control_rate_std": 2.6086956521739126,
+      "mean_dose_mean": 74.73863502458224,
+      "mean_dose_std": 1.0611557152081117
+    },
+    {
+      "w_dose": 0.3,
+      "n_seeds": 5,
+      "control_rate_mean": 28.695652173913043,
+      "control_rate_std": 2.1299910806810254,
+      "mean_dose_mean": 49.536860760463696,
+      "mean_dose_std": 3.7911315934842142
+    },
+    {
+      "w_dose": 0.6,
+      "n_seeds": 5,
+      "control_rate_mean": 26.086956521739133,
+      "control_rate_std": 5.833220810869017,
+      "mean_dose_mean": 31.41621385588432,
+      "mean_dose_std": 9.480056605540767
+    }
+  ]
+}
